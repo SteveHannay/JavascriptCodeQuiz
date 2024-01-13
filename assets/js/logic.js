@@ -6,14 +6,11 @@
     This code handles logic for the quiz
     Questions and Answers for the quiz are located in the javascript file questions.js
 
-    
-
 */
 
-// alert(javacriptQuestions[1].question)
 
-
-// Define Variables
+// Define Variables and Event Listeners
+// ------------------------------------
 
 // create references to html elements (using element id's)
 var divQuestions = document.querySelector("#questions")
@@ -24,21 +21,41 @@ var btnStart = document.querySelector("#start");
 var btnSubmit = document.querySelector("#submit");
 
 // module variables
-var questionIndex = 0
+var questionIndex = 0       // index of selected Question wihin the array of ALL Questions (javacriptQuestions)
+var correctAnswerIndex = 0  // index of correct Answer for a Question (javacriptQuestions.correctAnswerIndex)
+var userAnswerIndex = 0     // index of user's Answer from the array of ALL Possible Answers for a Question (javacriptQuestions.possibleAnswers)
+
+var questionsAnswered = 0
+var correctAnswers = 0
 
 
-// Add Event Listeners f
+// Add Event Listeners 
 btnStart.addEventListener("click", startQuiz)
 
+divChoices.addEventListener("click", function(event) {
+    
+    // If the clicked element is a button
+    var element = event.target;
+    if (element.matches("button") === true) {
 
+        // Get the userAnswerIndex from the "clicked" button (stored within the buttons data-index property) 
+        userAnswerIndex = element.getAttribute("data-index");
+
+        // Check the "user selected answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
+        checkAnswer()
+    }
+
+})
+
+
+
+// MAIN Logic
+// ----------
 
 // Start Quiz (triggered by "Start" button)
 function startQuiz() {
 
-
-
     // reset variables and screen
-    
 
     // Start Game Timer
     runGameTimer()
@@ -46,16 +63,23 @@ function startQuiz() {
     // Hide Start Button and Display First Question
     displayNextQuestion()
 
-    alert("END")
 }
 
 
 
-// Check User Answer (triggered by button click)
+// Check User Answer (triggered by a "answer" button clicked by the user)
 function checkAnswer() {
-    // get user answer from button that was clicked
-    // compare user answer with correct answer
-    // update scores
+
+    alert("CHECK ANSWER : user selected = " + userAnswerIndex + ", correct answer = " + correctAnswerIndex)
+
+    // Check the "user selected answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
+
+    // update game stats
+    questionsAnswered ++
+
+    if (userAnswerIndex == correctAnswerIndex){correctAnswers ++}
+    
+    console.log(correctAnswers + " out of " + questionsAnswered)
     
     // if user has answered all questions then
         // End Quiz
@@ -80,7 +104,8 @@ function endQuiz() {
 }
 
     
-// Utility functions :
+// Utility functions
+// -----------------
 
 // Display Next Question 
 function displayNextQuestion(){
@@ -91,6 +116,9 @@ function displayNextQuestion(){
     // Get Next Questions to Display ----> this can later be randomised
     questionIndex = 1
     
+    // Get the Answer to the Question (for later reference)
+    correctAnswerIndex = javacriptQuestions[questionIndex].correctAnswerIndex
+
     // Display Question Title
     divQuestionTitle.textContent = javacriptQuestions[questionIndex].question
 
@@ -106,7 +134,7 @@ function displayNextQuestion(){
         button.setAttribute("data-index", i)  // set the data-index to the the possition of the selected Possible Answer 
         divChoices.appendChild(button)
 
-  }
+    }
 
     // Set Visibility of the "questions" div
     divQuestions.setAttribute("class","show")
@@ -115,6 +143,12 @@ function displayNextQuestion(){
 
 // Clear Question
 function clearQuestion() {
+    // reset variables used for managing a question
+    questionIndex = 0
+    correctAnswerIndex = 0
+    userAnswerIndex = 0
+    
+    // reset screen
     divQuestionTitle.textContent = ""   // clear text from the "question title" div
     divChoices.innerHTML = ""           // remove buttons from the "choices" div
 }
