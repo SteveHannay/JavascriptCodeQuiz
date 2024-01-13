@@ -9,26 +9,22 @@
 */
 
 
+// Array of Objects
+// note : correctAnswerIndex starts at 0 and references the correct answer within the possibleAnswers array
+
 var javacriptQuestions = [
 	{
 		question: "QUESTION 1?",
-		selectableAnswers: {
-			a: '3',
-			b: '5',
-			c: '115'
-		},
-		correctAnswer: 'b'
+		possibleAnswers: ['answer a', 'answer b', 'answer c'],
+		correctAnswerIndex: 1
 	},
 	{
 		question: "QUESTION 2?",
-		selectableAnswers: {
-			a: '3',
-			b: '5',
-			c: '10',
-            d: ''
-		},
-		correctAnswer: 'c'
+		possibleAnswers: ['answer a', 'answer b', 'answer c', 'answer d', 'answer e'],
+		correctAnswerIndex: 2
 	}
 ];
+
+
 
 

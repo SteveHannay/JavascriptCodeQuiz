@@ -10,31 +10,48 @@
 
 */
 
-alert(javacriptQuestions[0].question)
+// alert(javacriptQuestions[1].question)
 
 
 // Define Variables
 
-    // create references to html elements
+// create references to html elements (using element id's)
+var divQuestions = document.querySelector("#questions")
+var divQuestionTitle = document.querySelector("#question-title");
+var divChoices = document.querySelector("#choices");
+
+var btnStart = document.querySelector("#start");
+var btnSubmit = document.querySelector("#submit");
+
+// module variables
+var questionIndex = 0
 
 
-// Add Event Listeners for Buttons and List
-
+// Add Event Listeners f
+btnStart.addEventListener("click", startQuiz)
 
 
 
 // Start Quiz (triggered by "Start" button)
 function startQuiz() {
 
-    // reset variables and screen
-    // Start Timer
-    // Display Question
 
+
+    // reset variables and screen
+    
+
+    // Start Game Timer
+    runGameTimer()
+
+    // Hide Start Button and Display First Question
+    displayNextQuestion()
+
+    alert("END")
 }
 
 
 
-// Check User Answer (triggered by List event - via button click)
+// Check User Answer (triggered by button click)
 function checkAnswer() {
     // get user answer from button that was clicked
     // compare user answer with correct answer
@@ -42,12 +59,14 @@ function checkAnswer() {
     
     // if user has answered all questions then
         // End Quiz
-    
+        // endQuiz()
     
     // if timer still running then 
         // display next question
+        // displayNextQuestion()
     // else 
-        //  End Quiz
+        //  End Quiz()
+        // endQuiz
 
 }
 
@@ -63,19 +82,45 @@ function endQuiz() {
     
 // Utility functions :
 
-// Display Question 
-function displayQuestion(){
-    // Clear Question Buttons
-    // Get Next Questions ----> this can later be randomised
+// Display Next Question 
+function displayNextQuestion(){
+
+    // Clear any existing Question
+    clearQuestion()
+
+    // Get Next Questions to Display ----> this can later be randomised
+    questionIndex = 1
+    
+    // Display Question Title
+    divQuestionTitle.textContent = javacriptQuestions[questionIndex].question
+
+    // Display Buttons for ALL possible Answers
+    var possibleAnswers = javacriptQuestions[questionIndex].possibleAnswers  // get an array of all possible answers
+
+    for (var i = 0; i < possibleAnswers.length; i++) {
+        
+        var selectedPossibleAnswer = possibleAnswers[i]
+        var button = document.createElement("button")
+
+        button.textContent = selectedPossibleAnswer
+        button.setAttribute("data-index", i)  // set the data-index to the the possition of the selected Possible Answer 
+        divChoices.appendChild(button)
+
+  }
+
+    // Set Visibility of the "questions" div
+    divQuestions.setAttribute("class","show")
+
 }
 
 // Clear Question
 function clearQuestion() {
-
+    divQuestionTitle.textContent = ""   // clear text from the "question title" div
+    divChoices.innerHTML = ""           // remove buttons from the "choices" div
 }
 
 // Game Timer     
-function gameTimer(){
+function runGameTimer(){
     // Countdown to zero from 
     // End Quiz is timer reaches zero
 }
