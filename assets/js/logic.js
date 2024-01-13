@@ -24,12 +24,18 @@ alert(javacriptQuestions[0].question)
 
 
 // Start Quiz (triggered by "Start" button)
+function startQuiz() {
+
     // reset variables and screen
     // Start Timer
     // Display Question
 
+}
+
+
 
 // Check User Answer (triggered by List event - via button click)
+function checkAnswer() {
     // get user answer from button that was clicked
     // compare user answer with correct answer
     // update scores
@@ -43,25 +49,35 @@ alert(javacriptQuestions[0].question)
     // else 
         //  End Quiz
 
+}
 
 
 // End Quiz
+function endQuiz() {
+
     // Clear Question Buttons
     // display score and give the user the ability to save their initials and their score
 
+}
 
     
-// Utility functins :
+// Utility functions :
 
 // Display Question 
+function displayQuestion(){
     // Clear Question Buttons
     // Get Next Questions ----> this can later be randomised
+}
 
 // Clear Question
+function clearQuestion() {
 
+}
 
 // Game Timer     
+function gameTimer(){
     // Countdown to zero from 
     // End Quiz is timer reaches zero
+}
 
 
