@@ -21,19 +21,19 @@ var javacriptQuestions = [
 	{
 		questionIndex: 0,
 		question: "QUESTION 0?",
-		possibleAnswers: ['answer a', 'answer b', 'answer c'],
+		possibleAnswers: ['answer 0a', 'answer 0b', 'answer 0c'],
 		correctAnswerIndex: 1
 	},
 	{
 		questionIndex: 1,
 		question: "QUESTION 1?",
-		possibleAnswers: ['answer a', 'answer b', 'answer c', 'answer d', 'answer e'],
+		possibleAnswers: ['answer 1a', 'answer 1b', 'answer 1c', 'answer 1d', 'answer 1e'],
 		correctAnswerIndex: 2
 	},
 	{
 		questionIndex: 2,
 		question: "QUESTION 2?",
-		possibleAnswers: ['answer a', 'answer b', 'answer c', 'answer d'],
+		possibleAnswers: ['answer 2a', 'answer 2b', 'answer 2c', 'answer 2d'],
 		correctAnswerIndex: 2
 	}
 ];

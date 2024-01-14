@@ -38,6 +38,7 @@ var allQuestionsAsked = false   // flag for when user has answered all questions
 var questionsAnswered = 0       // number of questions the user has answered
 var correctAnswers = 0          // number of correct answers by the user
 
+var gameTimerInterval = 0       // used for a 30 second game timer
 
 
 // add Event Listeners 
@@ -133,8 +134,10 @@ function checkAnswer() {
 // (3) End Quiz (called when all questions have been answered or the timer runs out)
 function endQuiz() {
 
+    // Stop Game Timer and Clear any currently displayed Question
+    stopGameTimer() 
+    clearQuestion()
     
-
     // display score and give the user the ability to save their initials and their score
 
     alert("END QUIZ")
@@ -148,11 +151,11 @@ function endQuiz() {
 // Display Next Question 
 function displayNextQuestion(){
 
-    // Clear any existing Question
+    // Clear any currently displayed Question
     clearQuestion()
 
-    // Get Next Questions to Display 
-    // - sets the objQuestion object to the next Question to ask (if there is an unasked question)
+    // Get Next Question to Display 
+    // - sets the objQuestion object to the next Question to ask user (if there is an unasked question)
     // - sets allQuestionsAsked to true if all questions have already been asked
     getNextQuestion()
     
@@ -228,27 +231,31 @@ function clearQuestion() {
 
 
 // Game Timer     
-var timeLeft = 30 
-var timerId = setInterval(runGameTimer, 1000)  // set timer interval to seconds
-
 function runGameTimer() {
-    
-    // Countdown to zero from 30 seconds
-    // - Display countdown on screen
-    // - End Quiz if timer reaches zero
 
-    spanTime.textContent = timeLeft // display the time left 
+    counter = 30 // set counter for 30 seconds 
+      
+    gameTimerInterval = setInterval(() => {
 
-  if (timeLeft == 0) {
-    // timer reached zero
-    clearTimeout(timerId);
-    alert("TIMES UP")
-    clearQuestion()
-    endQuiz()
-  } 
-  else {
-    // timer is still running
-    
-    timeLeft--;
+        // display the number of seconds left 
+        spanTime.textContent = counter 
+
+        // decrement timer 
+        counter--;
+        
+        // check for end of countdown
+        if (counter < 0 ) {
+        
+            // timer reached zero - stop timer and End Quiz
+            stopGameTimer()      
+            endQuiz()
+        }
+
+    }, 1000); // timer runs in seconds
+
   }
-}
+
+  function stopGameTimer() {
+    clearInterval(gameTimerInterval) // stop timer   
+  }
+
