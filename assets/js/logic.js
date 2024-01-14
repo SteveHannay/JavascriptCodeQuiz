@@ -18,7 +18,10 @@ var divQuestions = document.querySelector("#questions")
 var divQuestionTitle = document.querySelector("#question-title")
 var divChoices = document.querySelector("#choices")
 var divFeedback = document.querySelector("#feedback")
+var divEndScreen = document.querySelector("#end-screen")
+
 var spanTime = document.querySelector("#time")
+var spanFinalScore = document.querySelector("#final-score")
 
 var btnStart = document.querySelector("#start")
 var btnSubmit = document.querySelector("#submit")
@@ -137,10 +140,14 @@ function endQuiz() {
     // Stop Game Timer and Clear any currently displayed Question
     stopGameTimer() 
     clearQuestion()
-    
-    // display score and give the user the ability to save their initials and their score
 
-    alert("END QUIZ")
+    // Display "end-screen" div
+    divEndScreen.setAttribute("class","show")
+
+    // Display the Final Score 
+    spanFinalScore.textContent = correctAnswers + " (out of " + questionsAnswered + " questions answered)"
+
+    //alert("END QUIZ")
 }
 
     
@@ -238,7 +245,7 @@ function runGameTimer() {
     gameTimerInterval = setInterval(() => {
 
         // display the number of seconds left 
-        spanTime.textContent = counter 
+        spanTime.textContent = counter + " seconds left"
 
         // decrement timer 
         counter--;
