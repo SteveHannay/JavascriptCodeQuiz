@@ -21,12 +21,15 @@ var btnStart = document.querySelector("#start");
 var btnSubmit = document.querySelector("#submit");
 
 // module variables
-var questionIndex = 0       // index of selected Question wihin the array of ALL Questions (javacriptQuestions)
-var correctAnswerIndex = 0  // index of correct Answer for a Question (javacriptQuestions.correctAnswerIndex)
-var userAnswerIndex = 0     // index of user's Answer from the array of ALL Possible Answers for a Question (javacriptQuestions.possibleAnswers)
+var objQuestion = {}            // object containing the current question and its properties
 
-var questionsAnswered = 0
-var correctAnswers = 0
+var userAnswerIndex = 0         // index of user's Answer from the array of ALL Possible Answers for a Question (javacriptQuestions.possibleAnswers)
+
+var askedIndexArray = []        // an array of questionIndex's of asked questions (to prevent the same question being asked)
+var allQuestionsAsked = false   // flag for when user has answered all questions
+
+var questionsAnswered = 0       // number of questions the user has answered
+var correctAnswers = 0          // number of correct answers by the user
 
 
 // Add Event Listeners 
@@ -77,7 +80,7 @@ function checkAnswer() {
     // update game stats
     questionsAnswered ++
 
-    if (userAnswerIndex == correctAnswerIndex){correctAnswers ++}
+    if (userAnswerIndex == objQuestion.correctAnswerIndex){correctAnswers ++}
     
     console.log(correctAnswers + " out of " + questionsAnswered)
     
@@ -113,17 +116,21 @@ function displayNextQuestion(){
     // Clear any existing Question
     clearQuestion()
 
-    // Get Next Questions to Display ----> this can later be randomised
-    questionIndex = 1
+    // Get Next Questions to Display (sets the objQuestion object)
+    getNextQuestion()
     
-    // Get the Answer to the Question (for later reference)
-    correctAnswerIndex = javacriptQuestions[questionIndex].correctAnswerIndex
+    // If All Qustions have already been asked
+    if (allQuestionsAsked){
+
+        alert("displayNextQuestion() - ALL QUESTIONS ANSWERED")
+    }
+
 
     // Display Question Title
-    divQuestionTitle.textContent = javacriptQuestions[questionIndex].question
+    divQuestionTitle.textContent = objQuestion.question
 
     // Display Buttons for ALL possible Answers
-    var possibleAnswers = javacriptQuestions[questionIndex].possibleAnswers  // get an array of all possible answers
+    var possibleAnswers = objQuestion.possibleAnswers  // get an array of all possible answers
 
     for (var i = 0; i < possibleAnswers.length; i++) {
         
@@ -139,6 +146,39 @@ function displayNextQuestion(){
     // Set Visibility of the "questions" div
     divQuestions.setAttribute("class","show")
 
+}
+
+// Get Next Question
+function getNextQuestion(){
+
+    // Randomly selects a question and sets the objQuestion object to hold the question
+    // Sets allQuestionsAsked to true if all questions have been asked
+
+    var nextQuestionFound = false 
+
+    // set flag if all questions have already been asked
+    if (askedIndexArray.length == javacriptQuestions.length){
+        allQuestionsAsked = true
+        alert("askedIndexArray.length = javacriptQuestions.length")
+    }
+
+    // repeat while next question not yet found and all questions have not been asked 
+    while (nextQuestionFound == false && allQuestionsAsked == false) {
+        
+        // select a question at random
+        objQuestion = javacriptQuestions[(Math.floor(Math.random() * javacriptQuestions.length))]
+        
+        // if the question has not been asked before
+        if (askedIndexArray.indexOf(objQuestion.questionIndex) == -1) {
+
+            // select the question and add its questionIndex to the array of asked questions
+            askedIndexArray.push(objQuestion.questionIndex)
+            nextQuestionFound = true
+        }
+    }
+
+    // returns a boolean
+    return nextQuestionFound
 }
 
 // Clear Question
