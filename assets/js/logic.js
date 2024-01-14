@@ -13,12 +13,18 @@
 // ------------------------------------
 
 // create references to html elements (using element id's)
+var divStartScreen = document.querySelector("#start-screen")
 var divQuestions = document.querySelector("#questions")
-var divQuestionTitle = document.querySelector("#question-title");
-var divChoices = document.querySelector("#choices");
+var divQuestionTitle = document.querySelector("#question-title")
+var divChoices = document.querySelector("#choices")
+var divFeedback = document.querySelector("#feedback")
 
-var btnStart = document.querySelector("#start");
-var btnSubmit = document.querySelector("#submit");
+var btnStart = document.querySelector("#start")
+var btnSubmit = document.querySelector("#submit")
+
+// create references to audio files
+var audioCorrect = new Audio("./assets/sfx/correct.wav")
+var audioIncorrect = new Audio("./assets/sfx/incorrect.wav")
 
 // module variables
 var objQuestion = {}            // object containing the current question and its properties
@@ -30,6 +36,7 @@ var allQuestionsAsked = false   // flag for when user has answered all questions
 
 var questionsAnswered = 0       // number of questions the user has answered
 var correctAnswers = 0          // number of correct answers by the user
+
 
 
 // add Event Listeners 
@@ -64,7 +71,10 @@ function startQuiz() {
     // Start Game Timer
     runGameTimer()
 
-    // Hide Start Button and Display First Question
+    // Set Visibility of the "start-screen" div to "hide"
+    divStartScreen.setAttribute("class","hide")
+
+    // Display First Question
     displayNextQuestion()
 
 }
@@ -76,26 +86,50 @@ function checkAnswer() {
     // Check the users answer and display the next question (or end game)
     // note : the event handler for the "answer" buttons sets userAnswerIndex before calling this function
 
+    var questionAnsweredCorrectly = false
+
     // increment number of questions the user has answered
     questionsAnswered ++    
 
     // check users answer against the correct answer and update the number of correct answers
-    if (userAnswerIndex == objQuestion.correctAnswerIndex){correctAnswers ++}  // if 
+    if (userAnswerIndex == objQuestion.correctAnswerIndex){
+        questionAnsweredCorrectly = true
+        correctAnswers ++
+    }  
     console.log(correctAnswers + " out of " + questionsAnswered)
     
-    // Display next question (if any)
-    displayNextQuestion()
-    
-    // if user has answered all questions then End Quiz
-    if (allQuestionsAsked == true){
-        // End Quiz
-        endQuiz()
+    // Display Feedback ("correct" or "wrong" answer)
+    if (questionAnsweredCorrectly) {
+        divFeedback.textContent = "Correct!"
+        audioCorrect.play()
     }
+    else {
+        divFeedback.textContent = "Wrong Answer!"
+        audioIncorrect.play()
+    }
+
+    divFeedback.setAttribute("class","feedback")                // display feedback div
     
+    setTimeout(function() {                                     // wait a a second for user to see feedback
+        
+        // hide feedback div
+        divFeedback.setAttribute("class","feedback hide")       
+
+        // Display next question (if any)
+        displayNextQuestion()
+
+        // if user has answered all questions then End Quiz
+        if (allQuestionsAsked == true){
+            // End Quiz
+            endQuiz()
+        }
+    
+    }, 1000) // timer set to 1 second
+  
 }
 
 
-// (3) End Quiz
+// (3) End Quiz (called when all questions have been answered or the timer runs out)
 function endQuiz() {
 
     // display score and give the user the ability to save their initials and their score
@@ -115,12 +149,14 @@ function displayNextQuestion(){
     clearQuestion()
 
     // Get Next Questions to Display 
-    // sets the objQuestion object to the next Question to ask (if there is an unasked question)
-    // sets allQuestionsAsked to true if all questions have already been asked
+    // - sets the objQuestion object to the next Question to ask (if there is an unasked question)
+    // - sets allQuestionsAsked to true if all questions have already been asked
     getNextQuestion()
     
     // If NOT All Qustions have already been asked
     if (allQuestionsAsked == false){
+
+        // Display Question
 
         // Display Question Title
         divQuestionTitle.textContent = objQuestion.question
@@ -138,7 +174,7 @@ function displayNextQuestion(){
             divChoices.appendChild(button)
         }
 
-        // Set Visibility of the "questions" div
+        // Set Visibility of the "questions" div to "show"
         divQuestions.setAttribute("class","show")
 
     }
@@ -173,12 +209,11 @@ function getNextQuestion(){
         }
     }
 
-    // returns a boolean
-    return nextQuestionFound
 }
 
 // Clear Question
 function clearQuestion() {
+
     // reset variables used for managing a question
     objQuestion = {}
     userAnswerIndex = 0
