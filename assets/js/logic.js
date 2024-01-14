@@ -18,6 +18,7 @@ var divQuestions = document.querySelector("#questions")
 var divQuestionTitle = document.querySelector("#question-title")
 var divChoices = document.querySelector("#choices")
 var divFeedback = document.querySelector("#feedback")
+var spanTime = document.querySelector("#time")
 
 var btnStart = document.querySelector("#start")
 var btnSubmit = document.querySelector("#submit")
@@ -132,6 +133,8 @@ function checkAnswer() {
 // (3) End Quiz (called when all questions have been answered or the timer runs out)
 function endQuiz() {
 
+    
+
     // display score and give the user the ability to save their initials and their score
 
     alert("END QUIZ")
@@ -223,10 +226,29 @@ function clearQuestion() {
     divChoices.innerHTML = ""           // remove buttons from the "choices" div
 }
 
+
 // Game Timer     
-function runGameTimer(){
-    // Countdown to zero from 
-    // End Quiz is timer reaches zero
+var timeLeft = 30 
+var timerId = setInterval(runGameTimer, 1000)  // set timer interval to seconds
+
+function runGameTimer() {
+    
+    // Countdown to zero from 30 seconds
+    // - Display countdown on screen
+    // - End Quiz if timer reaches zero
+
+    spanTime.textContent = timeLeft // display the time left 
+
+  if (timeLeft == 0) {
+    // timer reached zero
+    clearTimeout(timerId);
+    alert("TIMES UP")
+    clearQuestion()
+    endQuiz()
+  } 
+  else {
+    // timer is still running
+    
+    timeLeft--;
+  }
 }
-
-
