@@ -32,22 +32,18 @@ var questionsAnswered = 0       // number of questions the user has answered
 var correctAnswers = 0          // number of correct answers by the user
 
 
-// Add Event Listeners 
+// add Event Listeners 
 btnStart.addEventListener("click", startQuiz)
 
 divChoices.addEventListener("click", function(event) {
-    
     // If the clicked element is a button
     var element = event.target;
     if (element.matches("button") === true) {
-
         // Get the userAnswerIndex from the "clicked" button (stored within the buttons data-index property) 
         userAnswerIndex = element.getAttribute("data-index");
-
-        // Check the "user selected answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
+        // Check the "user answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
         checkAnswer()
     }
-
 })
 
 
@@ -55,10 +51,15 @@ divChoices.addEventListener("click", function(event) {
 // MAIN Logic
 // ----------
 
-// Start Quiz (triggered by "Start" button)
+// (1) Start Quiz (triggered by "Start" button)
 function startQuiz() {
 
     // reset variables and screen
+    askedIndexArray = []        
+    allQuestionsAsked = false   
+    questionsAnswered = 0       
+    correctAnswers = 0          
+    clearQuestion()
 
     // Start Game Timer
     runGameTimer()
@@ -69,44 +70,41 @@ function startQuiz() {
 }
 
 
-
-// Check User Answer (triggered by a "answer" button clicked by the user)
+// (2) Check User Answer (triggered by an "answer" button clicked by the user)
 function checkAnswer() {
 
-    alert("CHECK ANSWER : user selected = " + userAnswerIndex + ", correct answer = " + correctAnswerIndex)
+    // Check the users answer and display the next question (or end game)
+    // note : the event handler for the "answer" buttons sets userAnswerIndex before calling this function
 
-    // Check the "user selected answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
+    // increment number of questions the user has answered
+    questionsAnswered ++    
 
-    // update game stats
-    questionsAnswered ++
-
-    if (userAnswerIndex == objQuestion.correctAnswerIndex){correctAnswers ++}
-    
+    // check users answer against the correct answer and update the number of correct answers
+    if (userAnswerIndex == objQuestion.correctAnswerIndex){correctAnswers ++}  // if 
     console.log(correctAnswers + " out of " + questionsAnswered)
     
-    // if user has answered all questions then
-        // End Quiz
-        // endQuiz()
+    // Display next question (if any)
+    displayNextQuestion()
     
-    // if timer still running then 
-        // display next question
-        // displayNextQuestion()
-    // else 
-        //  End Quiz()
-        // endQuiz
-
+    // if user has answered all questions then End Quiz
+    if (allQuestionsAsked == true){
+        // End Quiz
+        endQuiz()
+    }
+    
 }
 
 
-// End Quiz
+// (3) End Quiz
 function endQuiz() {
 
-    // Clear Question Buttons
     // display score and give the user the ability to save their initials and their score
 
+    alert("END QUIZ")
 }
 
     
+
 // Utility functions
 // -----------------
 
@@ -116,35 +114,34 @@ function displayNextQuestion(){
     // Clear any existing Question
     clearQuestion()
 
-    // Get Next Questions to Display (sets the objQuestion object)
+    // Get Next Questions to Display 
+    // sets the objQuestion object to the next Question to ask (if there is an unasked question)
+    // sets allQuestionsAsked to true if all questions have already been asked
     getNextQuestion()
     
-    // If All Qustions have already been asked
-    if (allQuestionsAsked){
+    // If NOT All Qustions have already been asked
+    if (allQuestionsAsked == false){
 
-        alert("displayNextQuestion() - ALL QUESTIONS ANSWERED")
-    }
+        // Display Question Title
+        divQuestionTitle.textContent = objQuestion.question
 
+        // Display Buttons for ALL possible Answers
+        var possibleAnswers = objQuestion.possibleAnswers  // get an array of all possible answers
 
-    // Display Question Title
-    divQuestionTitle.textContent = objQuestion.question
-
-    // Display Buttons for ALL possible Answers
-    var possibleAnswers = objQuestion.possibleAnswers  // get an array of all possible answers
-
-    for (var i = 0; i < possibleAnswers.length; i++) {
+        for (var i = 0; i < possibleAnswers.length; i++) {
         
-        var selectedPossibleAnswer = possibleAnswers[i]
-        var button = document.createElement("button")
+            var selectedPossibleAnswer = possibleAnswers[i]
+            var button = document.createElement("button")
 
-        button.textContent = selectedPossibleAnswer
-        button.setAttribute("data-index", i)  // set the data-index to the the possition of the selected Possible Answer 
-        divChoices.appendChild(button)
+            button.textContent = selectedPossibleAnswer
+            button.setAttribute("data-index", i)  // set the data-index to the the possition of the selected Possible Answer 
+            divChoices.appendChild(button)
+        }
+
+        // Set Visibility of the "questions" div
+        divQuestions.setAttribute("class","show")
 
     }
-
-    // Set Visibility of the "questions" div
-    divQuestions.setAttribute("class","show")
 
 }
 
@@ -159,7 +156,6 @@ function getNextQuestion(){
     // set flag if all questions have already been asked
     if (askedIndexArray.length == javacriptQuestions.length){
         allQuestionsAsked = true
-        alert("askedIndexArray.length = javacriptQuestions.length")
     }
 
     // repeat while next question not yet found and all questions have not been asked 
@@ -184,8 +180,7 @@ function getNextQuestion(){
 // Clear Question
 function clearQuestion() {
     // reset variables used for managing a question
-    questionIndex = 0
-    correctAnswerIndex = 0
+    objQuestion = {}
     userAnswerIndex = 0
     
     // reset screen
