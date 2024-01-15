@@ -23,8 +23,10 @@ var divEndScreen = document.querySelector("#end-screen")
 var spanTime = document.querySelector("#time")
 var spanFinalScore = document.querySelector("#final-score")
 
+var inputEnterInitails = document.querySelector("#initials")
+
 var btnStart = document.querySelector("#start")
-var btnSubmit = document.querySelector("#submit")
+var btnSubmitHighScore = document.querySelector("#submit")
 
 // create references to audio files
 var audioCorrect = new Audio("./assets/sfx/correct.wav")
@@ -58,6 +60,7 @@ divChoices.addEventListener("click", function(event) {
     }
 })
 
+btnSubmitHighScore.addEventListener("click", addHighScore)
 
 
 // MAIN Logic
@@ -76,10 +79,10 @@ function startQuiz() {
     // Start Game Timer
     runGameTimer()
 
-    // Set Visibility of the "start-screen" div to "hide"
+    // Hide the "start-screen" div 
     divStartScreen.setAttribute("class","hide")
 
-    // Display First Question
+    // Display the First Question
     displayNextQuestion()
 
 }
@@ -113,24 +116,23 @@ function checkAnswer() {
         audioIncorrect.play()
     }
 
-    divFeedback.setAttribute("class","feedback")                // display feedback div
+    // - show feedback div
+    divFeedback.setAttribute("class","feedback")                
     
-    setTimeout(function() {                                     // wait a a second for user to see feedback
-        
-        // hide feedback div
+    // - hide feedback div
+    setTimeout(function() {                                     // wait a a second for user to see feedback div 
         divFeedback.setAttribute("class","feedback hide")       
-
-        // Display next question (if any)
-        displayNextQuestion()
-
-        // if user has answered all questions then End Quiz
-        if (allQuestionsAsked == true){
-            // End Quiz
-            endQuiz()
-        }
-    
     }, 1000) // timer set to 1 second
   
+    // Display next question (if any)
+    displayNextQuestion()
+
+    // if user has answered all questions then End Quiz
+    if (allQuestionsAsked == true){
+        // End Quiz
+        endQuiz()
+    }
+
 }
 
 
@@ -147,10 +149,44 @@ function endQuiz() {
     // Display the Final Score 
     spanFinalScore.textContent = correctAnswers + " (out of " + questionsAnswered + " questions answered)"
 
-    //alert("END QUIZ")
 }
 
-    
+
+// (4) Save score to High Scores List
+function addHighScore(){
+
+    // Get the users initials
+    var userInitials = inputEnterInitails.value.trim()
+    if (userInitials == "") {
+        alert("Please enter your initials")
+        return
+    }
+
+    // Create an object for containing This Game's score
+    var thisGamesScore = {
+        score: correctAnswers,
+        outof: questionsAnswered,
+        initials: userInitials,
+        date: new Date().toLocaleDateString('en-GB')
+    };
+    console.log("highScore = " + thisGamesScore)
+
+    // Return the High Scores List array (containing scores from different games) from memory
+    var highScoresList = JSON.parse(localStorage.getItem('highScoresList')) || [];
+
+    // Add This Game's score (object) to the High Scores List array
+    highScoresList.push([thisGamesScore])
+
+    // Update the High Scores List array by writing it to memory (as a string) for later recall
+    localStorage.setItem("highScoresList", JSON.stringify(highScoresList));
+
+    // Navigate to the High Scores Page
+    window.location.href = "highscores.html"
+
+    alert("HIGH SCORE ADDED")
+}
+
+
 
 // Utility functions
 // -----------------
@@ -245,10 +281,10 @@ function runGameTimer() {
     gameTimerInterval = setInterval(() => {
 
         // display the number of seconds left 
-        spanTime.textContent = counter + " seconds left"
+        spanTime.textContent = counter 
 
         // decrement timer 
-        counter--;
+        counter--
         
         // check for end of countdown
         if (counter < 0 ) {
