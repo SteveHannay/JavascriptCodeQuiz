@@ -162,7 +162,6 @@ function checkAnswer() {
         // flag that an answer has NOT been selected (so that the next answer can be taken)
         answerAlreadySelected = false
 
-
     }, 1000) // timer set to 1 second
 
 }
@@ -175,12 +174,32 @@ function endQuiz() {
     stopGameTimer() 
     clearQuestion()
 
+    // Hide the "questions" div
+    divQuestions.setAttribute("class","hide")
+
     // Display "end-screen" div
     divEndScreen.setAttribute("class","show")
 
     // Display the Final Score 
     spanFinalScore.textContent = correctAnswers + " (out of " + questionsAnswered + " questions answered)"
 
+    // Display Feedback if User Ran Out of Time (Countdown Completed)
+    if (gameCounterSeconds < 1) {
+
+        // Show feedback div
+        divFeedback.textContent = "Your time is up (the Timer reached zero)"
+        divFeedback.setAttribute("class","feedback")                
+        
+        // wait a a second for user to see feedback div 
+        setTimeout(function() {                                     
+            
+        // hide feedback div
+        divFeedback.setAttribute("class","feedback hide")    
+            
+        }, 3000) // timer set to 3 seconds        
+            
+    }
+    
 }
 
 
@@ -188,7 +207,7 @@ function endQuiz() {
 function addHighScore(){
 
     // Get the users initials
-    var userInitials = inputEnterInitails.value.trim()
+    var userInitials = inputEnterInitails.value.trim().toUpperCase() // initials are trimmer and converted to upper case
     if (userInitials == "") {
         alert("Please enter your initials")
         return
@@ -201,7 +220,6 @@ function addHighScore(){
         initials: userInitials,
         date: new Date().toLocaleDateString('en-GB')
     };
-    console.log("highScore = " + thisGamesScore)
 
     // Return the High Scores List array (containing scores from different games) from memory
     var highScoresList = JSON.parse(localStorage.getItem('highScoresList')) || [];
@@ -229,6 +247,9 @@ function displayNextQuestion(){
     // Clear any currently displayed Question
     clearQuestion()
 
+    // If the timer has expired, do not show the next question
+    if (gameCounterSeconds < 1) {return}
+
     // Get Next Question to Display 
     // - sets the objQuestion object to the next Question to ask user (if there is an unasked question)
     // - sets allQuestionsAsked to true if all questions have already been asked
@@ -237,7 +258,7 @@ function displayNextQuestion(){
     // If NOT All Qustions have already been asked
     if (allQuestionsAsked == false){
 
-        // Display Question
+        // Display new Question
 
         // Display Question Title
         divQuestionTitle.textContent = objQuestion.question
@@ -292,7 +313,7 @@ function getNextQuestion(){
 
 }
 
-// Clear Question
+// Clear the current Question
 function clearQuestion() {
 
     // reset variables used for managing a question
@@ -312,16 +333,21 @@ function runGameTimer() {
       
     gameTimerInterval = setInterval(() => {
 
-        // Display the number of seconds left 
-        spanTime.textContent = gameCounterSeconds 
-
         // Decrement timer 
         gameCounterSeconds--
+
+        // Display the number of seconds left 
+        if (gameCounterSeconds > 0){
+            spanTime.textContent = gameCounterSeconds 
+        } else {
+            spanTime.textContent = 0 // if gameCounterSeconds has a minus value (due to a time penalty) display a 0
+        }
         
         // Check for end of countdown
-        if (gameCounterSeconds < 0 ) {
+        if (gameCounterSeconds < 1 ) {
         
             // Timer reached zero - Stop Timer and End Quiz
+            console.log("Game Timer reached " + gameCounterSeconds)
             stopGameTimer()      
             endQuiz()
         }
@@ -342,7 +368,7 @@ function applyGameTimerPenalty() {
     gameCounterSeconds = gameCounterSeconds - timePenaltyInSeconds  
     
     // Display the number of seconds left
-    if (gameCounterSeconds > -1){
+    if (gameCounterSeconds > 0){
         spanTime.textContent = gameCounterSeconds 
     }
     else {

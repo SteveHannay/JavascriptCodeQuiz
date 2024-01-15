@@ -44,7 +44,7 @@ function init(){
 
         // build a string to display in the list
         strDisplayText = "Score : " + gameScore.score + " out of " + gameScore.outof + 
-            ", Initials : " + gameScore.initials + ", Date : " + gameScore.date
+            ",  Initials : " + gameScore.initials + ",  Date : " + gameScore.date
 
         // add line html element to the ordered list
         var li = document.createElement("li")
