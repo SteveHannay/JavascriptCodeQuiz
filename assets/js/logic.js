@@ -32,18 +32,23 @@ var btnSubmitHighScore = document.querySelector("#submit")
 var audioCorrect = new Audio("./assets/sfx/correct.wav")
 var audioIncorrect = new Audio("./assets/sfx/incorrect.wav")
 
+// constants (change these values to customise the quiz)
+const lengthOfGameInSeconds = 30    // sets Game Length used by the Game Timer
+const timePenaltyInSeconds = 5      // sets the Time Penalty applied to the Game Timer following an incorrect answer
+
 // module variables
-var objQuestion = {}            // object containing the current question and its properties
+var objQuestion = {}                // object containing the current question and its properties
 
-var userAnswerIndex = 0         // index of user's Answer from the array of ALL Possible Answers for a Question (javacriptQuestions.possibleAnswers)
+var userAnswerIndex = 0             // index of user's Answer from the array of ALL Possible Answers for a Question (javacriptQuestions.possibleAnswers)
 
-var askedIndexArray = []        // an array of questionIndex's of asked questions (to prevent the same question being asked)
-var allQuestionsAsked = false   // flag for when user has answered all questions
+var askedIndexArray = []            // an array of questionIndex's of asked questions (to prevent the same question being asked)
+var allQuestionsAsked = false       // flag for when user has answered all questions
 
-var questionsAnswered = 0       // number of questions the user has answered
-var correctAnswers = 0          // number of correct answers by the user
+var questionsAnswered = 0           // number of questions the user has answered
+var correctAnswers = 0              // number of correct answers by the user
 
-var gameTimerInterval = 0       // used for a 30 second game timer
+var gameTimerInterval = 0           // used for setting a timer interval for the Game Timer
+var gameCounterSeconds = 0          // counter for the Game Timer
 
 
 // add Event Listeners 
@@ -96,23 +101,28 @@ function checkAnswer() {
 
     var questionAnsweredCorrectly = false
 
-    // increment number of questions the user has answered
+    // increment Number of Questions the user has Answered
     questionsAnswered ++    
 
-    // check users answer against the correct answer and update the number of correct answers
+    // check user's answer against the correct answer and update the Number of Correct Answers
     if (userAnswerIndex == objQuestion.correctAnswerIndex){
         questionAnsweredCorrectly = true
         correctAnswers ++
     }  
-    console.log(correctAnswers + " out of " + questionsAnswered)
+    console.log(correctAnswers + " out of " + questionsAnswered) // debugging
     
+    // If the answer was incorrect then subtract time from the clock
+    if (questionAnsweredCorrectly === false) {
+        applyGameTimerPenalty()
+    }
+
     // Display Feedback ("correct" or "wrong" answer)
     if (questionAnsweredCorrectly) {
         divFeedback.textContent = "Correct!"
         audioCorrect.play()
     }
     else {
-        divFeedback.textContent = "Wrong Answer!"
+        divFeedback.textContent = "Wrong Answer! A " + timePenaltyInSeconds + " second time penalty has been applied"
         audioIncorrect.play()
     }
 
@@ -276,29 +286,48 @@ function clearQuestion() {
 // Game Timer     
 function runGameTimer() {
 
-    counter = 30 // set counter for 30 seconds 
+    gameCounterSeconds = lengthOfGameInSeconds     // initialise counter
       
     gameTimerInterval = setInterval(() => {
 
-        // display the number of seconds left 
-        spanTime.textContent = counter 
+        // Display the number of seconds left 
+        spanTime.textContent = gameCounterSeconds 
 
-        // decrement timer 
-        counter--
+        // Decrement timer 
+        gameCounterSeconds--
         
-        // check for end of countdown
-        if (counter < 0 ) {
+        // Check for end of countdown
+        if (gameCounterSeconds < 0 ) {
         
-            // timer reached zero - stop timer and End Quiz
+            // Timer reached zero - Stop Timer and End Quiz
             stopGameTimer()      
             endQuiz()
         }
 
-    }, 1000); // timer runs in seconds
+    }, 1000);   // timer runs in second intervals (1000 miliseconds)
 
-  }
+}
 
-  function stopGameTimer() {
+function stopGameTimer() {
     clearInterval(gameTimerInterval) // stop timer   
-  }
+}
+
+function applyGameTimerPenalty() {
+    
+    var counterBeforePenalty = gameCounterSeconds
+
+    // Apply a Time Penalty in seconds (for a wrong answer)
+    gameCounterSeconds = gameCounterSeconds - timePenaltyInSeconds  
+    
+    // Display the number of seconds left
+    if (gameCounterSeconds > -1){
+        spanTime.textContent = gameCounterSeconds 
+    }
+    else {
+        spanTime.textContent = 0 // if gameCounterSeconds has a minus value (due to a time penalty) display 0
+    }
+
+    console.log(timePenaltyInSeconds + " second Penalty applied " + 
+        "(from " + counterBeforePenalty + " to " + gameCounterSeconds + " seconds)") // debugging
+}
 
