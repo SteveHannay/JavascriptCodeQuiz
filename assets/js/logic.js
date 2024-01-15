@@ -50,18 +50,22 @@ var correctAnswers = 0              // number of correct answers by the user
 var gameTimerInterval = 0           // used for setting a timer interval for the Game Timer
 var gameCounterSeconds = 0          // counter for the Game Timer
 
+var answerAlreadySelected = false   // used to prevent retriggering of Answer buttons 
 
 // add Event Listeners 
 btnStart.addEventListener("click", startQuiz)
 
 divChoices.addEventListener("click", function(event) {
-    // If the clicked element is a button
-    var element = event.target;
+
+    var element = event.target;      // If the clicked element is a button
     if (element.matches("button") === true) {
+
         // Get the userAnswerIndex from the "clicked" button (stored within the buttons data-index property) 
         userAnswerIndex = element.getAttribute("data-index");
+            
         // Check the "user answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
         checkAnswer()
+
     }
 })
 
@@ -101,6 +105,17 @@ function checkAnswer() {
 
     var questionAnsweredCorrectly = false
 
+    // Prevent retrigger of Answer buttons
+    // note : this prevents the user from quickly clicking on Answer buttons to the same question multiple times
+    if (answerAlreadySelected == false){
+        // flag that an Answer has now been selected
+        answerAlreadySelected = true
+    } else {
+        // do nothing if an Answer for this question has already been selected and processed
+        console.log("button click after original user Answer button click")
+        return
+    }
+
     // increment Number of Questions the user has Answered
     questionsAnswered ++    
 
@@ -126,22 +141,29 @@ function checkAnswer() {
         audioIncorrect.play()
     }
 
-    // - show feedback div
+    // Show feedback div
     divFeedback.setAttribute("class","feedback")                
     
-    // - hide feedback div
-    setTimeout(function() {                                     // wait a a second for user to see feedback div 
-        divFeedback.setAttribute("class","feedback hide")       
-    }, 1000) // timer set to 1 second
-  
-    // Display next question (if any)
-    displayNextQuestion()
+    // wait a a second for user to see feedback div 
+    setTimeout(function() {                                     
+        
+        // hide feedback div
+        divFeedback.setAttribute("class","feedback hide")    
+        
+        // Display next question (if any)
+        displayNextQuestion()
 
-    // if user has answered all questions then End Quiz
-    if (allQuestionsAsked == true){
-        // End Quiz
-        endQuiz()
-    }
+        // if user has answered all questions then End Quiz
+        if (allQuestionsAsked == true){
+            // End Quiz
+            endQuiz()
+        }
+
+        // flag that an answer has NOT been selected (so that the next answer can be taken)
+        answerAlreadySelected = false
+
+
+    }, 1000) // timer set to 1 second
 
 }
 

@@ -8,3 +8,8 @@
 
 */
 
+init()
+
+function init(){
+    alert("Init")
+}
