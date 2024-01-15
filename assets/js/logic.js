@@ -162,7 +162,7 @@ function checkAnswer() {
         // flag that an answer has NOT been selected (so that the next answer can be taken)
         answerAlreadySelected = false
 
-    }, 1000) // timer set to 1 second
+    }, 1500) // timer set to 1.5 second(s)
 
 }
 
@@ -196,7 +196,7 @@ function endQuiz() {
         // hide feedback div
         divFeedback.setAttribute("class","feedback hide")    
             
-        }, 3000) // timer set to 3 seconds        
+        }, 4000) // timer set to 4 seconds        
             
     }
     
