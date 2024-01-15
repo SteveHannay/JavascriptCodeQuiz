@@ -60,7 +60,7 @@ divChoices.addEventListener("click", function(event) {
     var element = event.target;      // If the clicked element is a button
     if (element.matches("button") === true) {
 
-        // Get the userAnswerIndex from the "clicked" button (stored within the buttons data-index property) 
+        // Get the userAnswerIndex from the "clicked" button (stored within the Answer buttons data-index property) 
         userAnswerIndex = element.getAttribute("data-index");
             
         // Check the "user answer" (userAnswerIndex) against the "correct answer" (correctAnswerIndex)
@@ -207,7 +207,8 @@ function addHighScore(){
     var highScoresList = JSON.parse(localStorage.getItem('highScoresList')) || [];
 
     // Add This Game's score (object) to the High Scores List array
-    highScoresList.push([thisGamesScore])
+    //highScoresList.push([thisGamesScore])
+    highScoresList.push(thisGamesScore)
 
     // Update the High Scores List array by writing it to memory (as a string) for later recall
     localStorage.setItem("highScoresList", JSON.stringify(highScoresList));
@@ -215,7 +216,6 @@ function addHighScore(){
     // Navigate to the High Scores Page
     window.location.href = "highscores.html"
 
-    alert("HIGH SCORE ADDED")
 }
 
 

@@ -17,24 +17,38 @@
 // "possibleAnswers" is an array of possible answers for the user to select from
 // "correctAnswerIndex" references the correct answer within the possibleAnswers array (index starts at 0)
 
+// Questions are based on questions taken from https://www.interviewbit.com/javascript-mcq/
+
 var javacriptQuestions = [
 	{
 		questionIndex: 0,
-		question: "QUESTION 0?",
-		possibleAnswers: ['answer 0a', 'answer 0b', 'answer 0c'],
-		correctAnswerIndex: 1
+		question: "Javascript is an _______ language?",
+		possibleAnswers: ['Object-Orientated', 'Object-Based', 'Procedural', 'None of the above'],
+		correctAnswerIndex: 0
 	},
 	{
 		questionIndex: 1,
-		question: "QUESTION 1?",
-		possibleAnswers: ['answer 1a', 'answer 1b', 'answer 1c', 'answer 1d', 'answer 1e'],
+		question: "Which of the following keywords is used to define a variable in Javascript?",
+		possibleAnswers: ['var', 'let', 'Both of the above', 'None of the above'],
 		correctAnswerIndex: 2
 	},
 	{
 		questionIndex: 2,
-		question: "QUESTION 2?",
-		possibleAnswers: ['answer 2a', 'answer 2b', 'answer 2c', 'answer 2d'],
+		question: "Which of the following methods is used to access HTML elements using Javascript?",
+		possibleAnswers: ['getElementById', 'getElementByClassName', 'Both of the above', 'None of the above'],
 		correctAnswerIndex: 2
+	},
+	{
+		questionIndex: 3,
+		question: "Upon encountering empty statements, what does the Javascript Interpreter do?",
+		possibleAnswers: ['Throws an Error', 'Ignores the statements', 'Gives a warning', 'None of the above'],
+		correctAnswerIndex: 1
+	},
+	{
+		questionIndex: 4,
+		question: "Which of the following methods can be used to display data in some form using Javascript?",
+		possibleAnswers: ['document.write()', 'console.log()', 'window.alert()', 'All of the above'],
+		correctAnswerIndex: 3
 	}
 ];
 
