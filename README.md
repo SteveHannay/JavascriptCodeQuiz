@@ -5,6 +5,7 @@ Challenge project for 06-web-apis-module
 Task - Create javascript code for a user Quiz on Javascript Code
 
 Developer - Steve Hannay
+
 Completed - 16th Jan 2024
 
 
@@ -12,7 +13,7 @@ Completed - 16th Jan 2024
 
 The aim of this project is to create a Quiz for the user to select from multiple choice answers to questions about Javascript.
 
-The following acceptance criteria was set for by the project :
+The following acceptance criteria was set for the project :
 
 --------------------------------------------------------------------------------------------------------------------------
 
@@ -48,41 +49,54 @@ No installation is necessary.
 
 ## Usage
 
-This is a simple webpage to use.
+Follow these instructions.
 
-- Click on the "Generate Passord" button.
+Start :
 
-- Click through the various prompts that will appear on screen. Prompts will appear for entering the following :
+- Click on the "Start Quiz" button to start a new game (see "Start Quiz" screenshot below).
 
-    - Length of Password (between 8 and 128 chracters)
+Questions :
 
-    - Include Lower Case (Ok/Cancel)
-    - Include Upper Case (Ok/Cancel)
-    - Include Numberic (Ok/Cancel)
-    - Include Special Chatracters (Ok/Cancel)
+- A series of Questions about Javascript will be presented on screen (see "Question" screenshot below).
 
-    (at least one type of character type must be selected)
+- For each Question a set of buttons representing possible answers (multichoice) will appear.
 
-- A new password will be generated and displayed on screen.
+- Select the answers to each of the questions by clicking on the appropriate answer button.
+
+- A Time (coundown) will appear at the top-right of the screen. Once this reaches zero (or all questions have been answered) the game will end.
+
+- A penalty will be applied (currently set to 10 seconds) for every wrong answer that you select.
+
+Game Results :
+
+- At the end of the game the score will be presented on the Game Results screen (see "Game Result" screenshot below).
+
+- You can save your game's score to the High Scores List by entering your initials and clicking on the "Submit" button.
+
+High Scores :
+
+- The list of saved high scores is displayed on the High Scores screen (see "High Scores" screenshot below).
+
+- To permanently delete the list of saved high scores click on the "Clear High Scores" button.
+
+- To return to the "Start Quiz" screen to play another game, click on the "Go Back" button.
 
 
-Here are screenshots of the Generate Password the webpage created for the project.
 
-- This is the webpage with the "Generate Password" coloured in red.
-![Challenge 5 - screenshot of Generate Password webpage](images/MainScreenshot.png)
+Here are screenshots of the Javascript Code Quiz created for the project.
 
-- This is the "Enter Length" message, prompting the user to enter a value.
-![Challenge 5 - screenshot of the Enter Length message](images/EnterLength.png)
+- This is the "Start Quiz" screen for starting a new game.
+![Challenge 6 - screenshot of Start Quiz screen](assets/images/StartQuiz.png)
 
-- This is the "Include Lower Case?" message, prompting the user to choose whether to include Lower Case characters.
-- note : Similar messages then appear for "Include Upper Case?", "Include Numeric?" and "Include Special Characters?". 
-![Challenge 5 - screenshot of the Include Lower Case? message](images/IncludeLowercase.png)
+- This is the "Question" screen where a question and multiple possible answers are presented to the user.
+![Challenge 6 - screenshot of the Question screen](assets/images//Question.png)
 
-- The new password is generated and displayed to the user in a message.
-![Challenge 5 - screenshot of the Your New Password message](images/YourNewPassword.png)
+- This is the "Game Results" screen which is presented to the user when the game ends and allows the user to save the games score.
+![Challenge 6 - screenshot of the Game Results screen](assets/images/GameResults.png)
 
-- The new password is also displayed on the webpage itself.
-![Challenge 5 - screenshot of the New Password displayed on screen](images/NewPasswordOnScreen.png)
+- The is the "High Scores" screen which lists saved High Scores from All Games where the score was saved.
+![Challenge 6 - screenshot of the High Scores screen](assets/images//HighScores.png)
+
 
 
 ## Credits
