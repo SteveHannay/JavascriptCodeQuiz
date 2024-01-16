@@ -1,4 +1,4 @@
-# Challenge 56 - JavascriptCodeQuiz
+# Challenge 6 - JavascriptCodeQuiz
 
 Challenge project for 06-web-apis-module
  
