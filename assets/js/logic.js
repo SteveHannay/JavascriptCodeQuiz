@@ -32,9 +32,6 @@ var btnSubmitHighScore = document.querySelector("#submit")
 var audioCorrect = new Audio("./assets/sfx/correct.wav")
 var audioIncorrect = new Audio("./assets/sfx/incorrect.wav")
 
-// constants (change these values to customise the quiz)
-const lengthOfGameInSeconds = 30    // sets Game Length used by the Game Timer
-const timePenaltyInSeconds = 5      // sets the Time Penalty applied to the Game Timer following an incorrect answer
 
 // module variables
 var objQuestion = {}                // object containing the current question and its properties
@@ -51,6 +48,11 @@ var gameTimerInterval = 0           // used for setting a timer interval for the
 var gameCounterSeconds = 0          // counter for the Game Timer
 
 var answerAlreadySelected = false   // used to prevent retriggering of Answer buttons 
+
+// constants (change these values to customise the quiz)
+const lengthOfGameInSeconds = 60    // GAME SETTING - sets Game Length used by the Game Timer
+const timePenaltyInSeconds = 10     // GAME SETTING - sets the Time Penalty applied to the Game Timer following an incorrect answer
+
 
 // add Event Listeners 
 btnStart.addEventListener("click", startQuiz)
@@ -72,24 +74,24 @@ divChoices.addEventListener("click", function(event) {
 btnSubmitHighScore.addEventListener("click", addHighScore)
 
 
+
 // MAIN Logic
 // ----------
 
 // (1) Start Quiz (triggered by "Start" button)
 function startQuiz() {
 
-    // reset variables and screen
+    // reset game variables 
     askedIndexArray = []        
     allQuestionsAsked = false   
     questionsAnswered = 0       
     correctAnswers = 0          
-    clearQuestion()
-
-    // Start Game Timer
-    runGameTimer()
 
     // Hide the "start-screen" div 
     divStartScreen.setAttribute("class","hide")
+
+    // Start Game Timer
+    runGameTimer()
 
     // Display the First Question
     displayNextQuestion()
@@ -101,11 +103,11 @@ function startQuiz() {
 function checkAnswer() {
 
     // Check the users answer and display the next question (or end game)
-    // note : the event handler for the "answer" buttons sets userAnswerIndex before calling this function
+    // note : the event handler for the "answer" buttons sets the variable userAnswerIndex before calling this function
 
     var questionAnsweredCorrectly = false
 
-    // Prevent retrigger of Answer buttons
+    // Prevent multi-clicking of Answer buttons
     // note : this prevents the user from quickly clicking on Answer buttons to the same question multiple times
     if (answerAlreadySelected == false){
         // flag that an Answer has now been selected
@@ -144,30 +146,27 @@ function checkAnswer() {
     // Show feedback div
     divFeedback.setAttribute("class","feedback")                
     
-    // wait a a second for user to see feedback div 
+    // - wait a while for user to see feedback div 
     setTimeout(function() {                                     
         
-        // hide feedback div
+        // - hide feedback div
         divFeedback.setAttribute("class","feedback hide")    
         
         // Display next question (if any)
         displayNextQuestion()
 
-        // if user has answered all questions then End Quiz
-        if (allQuestionsAsked == true){
-            // End Quiz
-            endQuiz()
-        }
+        // If user has Answered All Questions then End Quiz
+        if (allQuestionsAsked == true) {endQuiz()}
 
-        // flag that an answer has NOT been selected (so that the next answer can be taken)
+        // reset flag (so that the next answer can be taken)
         answerAlreadySelected = false
 
-    }, 1500) // timer set to 1.5 second(s)
+    }, 1500) // timer set to run code after 1.5 second(s)
 
 }
 
 
-// (3) End Quiz (called when all questions have been answered or the timer runs out)
+// (3) End Quiz (called when the timer runs out or all questions have been answered)
 function endQuiz() {
 
     // Stop Game Timer and Clear any currently displayed Question
@@ -182,23 +181,6 @@ function endQuiz() {
 
     // Display the Final Score 
     spanFinalScore.textContent = correctAnswers + " (out of " + questionsAnswered + " questions answered)"
-
-    // Display Feedback if User Ran Out of Time (Countdown Completed)
-    if (gameCounterSeconds < 1) {
-
-        // Show feedback div
-        divFeedback.textContent = "Your time is up (the Timer reached zero)"
-        divFeedback.setAttribute("class","feedback")                
-        
-        // wait a a second for user to see feedback div 
-        setTimeout(function() {                                     
-            
-        // hide feedback div
-        divFeedback.setAttribute("class","feedback hide")    
-            
-        }, 4000) // timer set to 4 seconds        
-            
-    }
     
 }
 
@@ -207,8 +189,9 @@ function endQuiz() {
 function addHighScore(){
 
     // Get the users initials
-    var userInitials = inputEnterInitails.value.trim().toUpperCase() // initials are trimmer and converted to upper case
-    if (userInitials == "") {
+    var userInitials = inputEnterInitails.value.trim().toUpperCase()    // initials are trimmer and converted to upper case
+    userInitials = userInitials.substring(0,5)                          // limit user initials to a maximum of 5 characters
+    if (userInitials == "") {                                           // checks that at least one initial has been entered
         alert("Please enter your initials")
         return
     }
@@ -221,14 +204,14 @@ function addHighScore(){
         date: new Date().toLocaleDateString('en-GB')
     };
 
-    // Return the High Scores List array (containing scores from different games) from memory
+    // Return the High Scores List array of objects from local memory
     var highScoresList = JSON.parse(localStorage.getItem('highScoresList')) || [];
 
-    // Add This Game's score (object) to the High Scores List array
+    // Add This Game's score (object) to the High Scores List array of objects
     //highScoresList.push([thisGamesScore])
     highScoresList.push(thisGamesScore)
 
-    // Update the High Scores List array by writing it to memory (as a string) for later recall
+    // Update the High Scores List array of objects by writing it to memory (as a string) for later recall
     localStorage.setItem("highScoresList", JSON.stringify(highScoresList));
 
     // Navigate to the High Scores Page
@@ -329,21 +312,25 @@ function clearQuestion() {
 // Game Timer     
 function runGameTimer() {
 
+    // Start the Game Timer
+    // note : the value of the constant lengthOfGameInSeconds can be changed to alter the Game Settings
+
     gameCounterSeconds = lengthOfGameInSeconds     // initialise counter
       
+    // Start Timer
     gameTimerInterval = setInterval(() => {
 
-        // Decrement timer 
+        // Decrement Counter 
         gameCounterSeconds--
 
-        // Display the number of seconds left 
+        // Display the Number of Seconds left 
         if (gameCounterSeconds > 0){
             spanTime.textContent = gameCounterSeconds 
         } else {
             spanTime.textContent = 0 // if gameCounterSeconds has a minus value (due to a time penalty) display a 0
         }
         
-        // Check for end of countdown
+        // Check for End Of Countdown
         if (gameCounterSeconds < 1 ) {
         
             // Timer reached zero - Stop Timer and End Quiz
@@ -352,19 +339,22 @@ function runGameTimer() {
             endQuiz()
         }
 
-    }, 1000);   // timer runs in second intervals (1000 miliseconds)
+    }, 1000);   // timer runs in 1 second intervals (1000 miliseconds)
 
 }
 
 function stopGameTimer() {
-    clearInterval(gameTimerInterval) // stop timer   
+    // Stop the Game Timer
+    clearInterval(gameTimerInterval)   
 }
 
 function applyGameTimerPenalty() {
-    
-    var counterBeforePenalty = gameCounterSeconds
 
     // Apply a Time Penalty in seconds (for a wrong answer)
+    // note : the value of the constant timePenaltyInSeconds can be changed to alter the Game Settings
+
+    var counterBeforePenalty = gameCounterSeconds
+
     gameCounterSeconds = gameCounterSeconds - timePenaltyInSeconds  
     
     // Display the number of seconds left
